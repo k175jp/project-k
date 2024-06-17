@@ -25,9 +25,3 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     token = manager.create_access_token(data={'sub': user.username}, expires=timedelta(hours=12))
 
     return Token(access_token=token, token_type='bearer')
-
-@router.post('/logout')
-def logout():
-    response = Response(status_code=200)
-    response.delete_cookie(key=manager.cookie_name)
-    return response
