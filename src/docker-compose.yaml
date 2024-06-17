@@ -1,0 +1,39 @@
+services:
+  front: 
+    container_name: front
+    restart: always
+    depends_on:
+      - mysql
+    build: 
+      context: front
+      dockerfile: Dockerfile
+    tty: true
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    init: true
+    
+
+  api:
+    container_name: api
+    restart: always
+    depends_on:
+      - mysql
+    volumes:
+      - ./api/app:/app/src
+    build:
+      context: api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+
+  mysql:
+    image: mysql/mysql-server
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: project_k
+      MYSQL_USER: project_k
+      MYSQL_PASSWORD: project_k
