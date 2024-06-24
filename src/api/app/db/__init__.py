@@ -10,7 +10,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def create_tables():
-    from db.models import User
+    from db.models import User, QuestionSet, Question, Result
 
     print(f"Creating database at: {engine.url}")
     Base.metadata.create_all(bind=engine)

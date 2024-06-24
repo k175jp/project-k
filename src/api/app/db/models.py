@@ -19,7 +19,7 @@ class User(Base):
 
 
 class QuestionSet(Base):
-    __tablename__ == "question_set"
+    __tablename__ = "question_set"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
@@ -34,7 +34,7 @@ class QuestionSet(Base):
     
 
 class Question(Base):
-    __tablename__ == "question"
+    __tablename__ = "question"
     
     id = Column(Integer, primary_key=True)
     question_set_id = Column(Integer, ForeignKey("question_set.id"))
@@ -51,7 +51,7 @@ class Question(Base):
 
 
 class Result(Base):
-    __tablename__ == "result"
+    __tablename__ = "result"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
