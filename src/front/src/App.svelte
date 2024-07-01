@@ -3,8 +3,11 @@
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<h1>Project-K</h1>
+	<div class="loginAndRegister">
+		<button class="login" on:click={() => window.location.href = '/login'}>ログイン</button>
+		<button class="register" on:click={() => window.location.href = '/register'}>アカウント作成</button>
+	</div>
 </main>
 
 <style>
@@ -20,6 +23,16 @@
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
+	}
+
+	div.loginAndRegister {
+		display: flex;
+		justify-content: center;
+	}
+
+	button {
+		padding: 15px 25px;
+		margin: 10px 20px;
 	}
 
 	@media (min-width: 640px) {
