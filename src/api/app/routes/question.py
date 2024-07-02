@@ -5,12 +5,10 @@ from db.actions import create_question_set, create_question
 from models.question import CreateQuestion
 from security import verify_password, manager
 
-from datetime import timedelta
-
-router = APIRouter(prefix="/question")
+router = APIRouter()
 
 @router.post("/create")
-def create(
+async def create(
     question_set: CreateQuestion, active_user=Depends(manager), db=Depends(get_session)
 ):
     qs = create_question_set(user_id=active_user.id, title=question_set.title, description=question_set.description, db=db)
