@@ -6,11 +6,10 @@ from security import manager
 from fastapi import APIRouter, Depends
 from sqlalchemy.exc import IntegrityError
 
-router = APIRouter(prefix="/user")
-
+router = APIRouter()
 
 @router.post("/register", response_model=UserResponse, status_code=201)
-def register(user: UserCreate, db=Depends(get_session)) -> UserResponse:
+async def register(user: UserCreate, db=Depends(get_session)) -> UserResponse:
     try:
         user = create_user(user.username, user.password, db)
         return UserResponse.from_orm(user)
@@ -19,7 +18,7 @@ def register(user: UserCreate, db=Depends(get_session)) -> UserResponse:
 
 
 @router.get("/{username}")
-def read_user(
+async def read_user(
     username, active_user=Depends(manager), db=Depends(get_session)
 ) -> UserResponse:
     user = get_user_by_name(username, db)

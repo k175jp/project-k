@@ -11,8 +11,8 @@ class User(Base):
     username = Column(String(32), unique=True)
     password = Column(String(80))
     
-    question_sets = relationship("QuestionSet", backref="question_set")
-    result = relationship("Result", backref="result")
+    question_sets = relationship("QuestionSet", backref="question_set_user")
+    result = relationship("Result", backref="result_user")
 
     def __repr__(self) -> str:
         return f"User(username={self.username})"
@@ -26,8 +26,8 @@ class QuestionSet(Base):
     title = Column(String(32))
     description = Column(String(256))
     
-    questions = relationship("Question", backref="question")
-    result = relationship("Result", backref="result")
+    questions = relationship("Question", backref="question_question_set")
+    result = relationship("Result", backref="result_question_set")
 
     def __repr__(self) -> str:
         return f"QuestionSet(user_id={self.user_id}, title={self.title}, description={self.description})"
@@ -44,7 +44,7 @@ class Question(Base):
     choice3 = Column(String(255))
     choice4 = Column(String(255))
 
-    result = relationship("Result", backref="result")
+    result = relationship("Result", backref="result_question")
 
     def __repr__(self) -> str:
         return f"Question(question_set_id={self.question_set_id}, text={self.text}, choice1={self.choice1}, choice2={self.choice2}, choice3={self.choice3}, choice4={self.choice4})"
