@@ -1,10 +1,9 @@
-
 <script lang="ts">
     import { goto } from '$app/navigation';
-  
+
     let username = '';
     let password = '';
-  
+
     async function handleSubmit() {
       try {
         const response = await fetch('http://192.168.7.38:8000/auth/login', {
@@ -15,7 +14,7 @@
           body: JSON.stringify({ username, password }),
         });
         const result = await response.json();
-        
+
         if (result.access_token) {
           localStorage.setItem('token', result.access_token);
           console.log('トークンが保存されました:', result.access_token);
@@ -28,7 +27,7 @@
       }
     }
   </script>
-  
+
   <h1>ログイン</h1>
   <form on:submit|preventDefault={handleSubmit}>
     <div>
@@ -41,9 +40,9 @@
     </div>
     <button type="submit">ログイン</button>
   </form>
-  
+
   <p>アカウントをお持ちでない方は<a href="/register">こちら</a></p>
-  
+
   <style>
     form {
       display: flex;

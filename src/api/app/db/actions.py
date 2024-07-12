@@ -35,3 +35,6 @@ def create_question(question_set_id: int, text: str, choice1: str, choice2: str,
     db.add(question)
     db.commit()
     return question
+
+def get_question_set(id: int, db: Session):
+    return db.query(QuestionSet).where(QuestionSet.user_id == id).first()
