@@ -8,7 +8,7 @@
 
   async function handleSubmit() {
     try {
-      const response = await fetch('http://localhost:8000/user/register', {
+      const response = await fetch('http://192.168.7.38:8000/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
