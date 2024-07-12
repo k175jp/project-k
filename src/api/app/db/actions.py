@@ -35,3 +35,7 @@ def create_question(question_set_id: int, text: str, choice1: str, choice2: str,
     db.add(question)
     db.commit()
     return question
+
+def get_question_set_by_id(question_set_id: int, db: Session) -> QuestionSet:
+    question_set = db.query(Question).where(Question.question_set_id == question_set_id).all()
+    return question_set
