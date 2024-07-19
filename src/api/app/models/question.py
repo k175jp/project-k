@@ -6,6 +6,12 @@ class CreateQuestion(BaseModel):
     description: str
     questions: List[Dict[str, str]]
 
+class GetQuestion(BaseModel):
+    title: str
+    description: str
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
 class QuestionSetResponse(BaseModel):
     id: int
     text: str

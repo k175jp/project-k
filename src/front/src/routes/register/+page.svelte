@@ -8,23 +8,23 @@
 
   async function handleSubmit() {
     try {
-      const response = await fetch('http://192.168.7.38:8000/user/register', {
+      const response = await fetch('http://192.168.7.5:8000/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
-      
+
       if (response.status === 400) {
         alert('すでにユーザーが存在します');
         return;
       }
-      
+
       if (!response.ok) {
         throw new Error('サーバーエラーが発生しました');
       }
-      
+
       const result = await response.json();
       console.log(result);
       showRegisterToast.set(true);

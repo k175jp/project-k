@@ -1,5 +1,6 @@
 from typing import Optional
 
+import random
 from db import SessionLocal
 from db.models import User, QuestionSet, Question, Result
 from security import hash_password, manager
@@ -63,3 +64,7 @@ def save_result(user_id: int, question_set_id: int, question_id: int, is_correct
         result = Result(user_id=user_id, question_set_id=question_set_id, question_id=question_id, is_correct=is_correct)
         db.add(result)
     db.commit()
+
+def random_question_set(db: Session):
+    question = db.query(QuestionSet).all()
+    return random.sample(question, 3)

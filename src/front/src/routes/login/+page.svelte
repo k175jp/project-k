@@ -7,22 +7,21 @@
   let username = '';
   let password = '';
 
-  async function handleSubmit() {
-    try {
-      const response = await fetch('http://192.168.7.38:8000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
+    async function handleSubmit() {
+      try {
+        const response = await fetch('http://192.168.7.5:8000/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        });
 
-      if (response.status === 401) {
-        // エラー処理
-        return;
-      }
-
-      const result = await response.json();
+        if (response.status === 401) {
+          // エラー処理
+          return;
+        }
+        const result = await response.json();
 
       if (result.access_token) {
         localStorage.setItem('token', result.access_token);

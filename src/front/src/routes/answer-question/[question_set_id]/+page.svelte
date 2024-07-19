@@ -5,7 +5,7 @@
     import { page } from '$app/stores';
 
     export let data;
-  
+
     let questions = [];
     let isFetch = false;
     let currentQuestionIndex = 0;
@@ -17,7 +17,7 @@
     let option = '';
 
     async function get_question(option) {
-      let url = `http://192.168.7.38:8000/question/get_question_set/${data.params.question_set_id}${option}`
+      let url = `http://192.168.7.5:8000/question/get_question_set/${data.params.question_set_id}${option}`
       const response = await fetch(url,{
         headers: {
           'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -26,7 +26,7 @@
       questions = await response.json();
       isFetch = true;
     };
-  
+
     onMount(async () => {
       if ($page.url.searchParams.get('mistakes') === "true") {
         option = '?mistakes=true';
@@ -37,7 +37,7 @@
     async function selectAnswer(choice, select) {
       if (!isAnswered) {
         selectedAnswer = choice;
-        const response = await fetch(`http://192.168.7.38:8000/question/answer`, {
+        const response = await fetch(`http://192.168.7.5:8000/question/answer`, {
         method: 'POST',
         headers: {
           'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -56,7 +56,7 @@
         isAnswered = true;
       }
     }
-  
+
     function nextQuestion() {
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
@@ -97,7 +97,7 @@
       await get_question(option);
     }
   </script>
-  
+
 
 <div class="max-w-2xl mx-auto p-4">
   {#if !result}
@@ -111,8 +111,8 @@
     </div>
     <div class="grid grid-cols-2 gap-4 mb-4">
       {#each ['A', 'B', 'C', 'D'] as choice, index}
-        <Button 
-          color={selectedAnswer === choice ? 'red' : 'light'} 
+        <Button
+          color={selectedAnswer === choice ? 'red' : 'light'}
           class="justify-start"
           on:click={() => selectAnswer(choice, questions[currentQuestionIndex][`choice${index + 1}`])}
         >

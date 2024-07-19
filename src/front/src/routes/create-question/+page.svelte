@@ -30,14 +30,14 @@
       }
       qs.push({
         "text": q.question,
-        "choice1": q.answers[0], 
-        "choice2": q.answers[1], 
-        "choice3": q.answers[2], 
+        "choice1": q.answers[0],
+        "choice2": q.answers[1],
+        "choice3": q.answers[2],
         "choice4": q.answers[3]
       });
     }
     let req = {'title': title, 'description':description, 'questions': qs};
-    fetch("http://192.168.7.38:8000/question/create", {
+    fetch("http://192.168.7.5:8000/question/create", {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem('token'),
         "Content-Type": "application/json"
@@ -80,12 +80,12 @@
 
   <div class="mb-4">
     <Label for="title">タイトル</Label>
-    <Input id="title" type="text" bind:value={title} /> 
+    <Input id="title" type="text" bind:value={title} />
   </div>
 
   <div class="mb-4">
     <Label for="description">説明</Label>
-    <Input id="description" type="text" bind:value={description} /> 
+    <Input id="description" type="text" bind:value={description} />
   </div>
 
   <div class="mb-4">
