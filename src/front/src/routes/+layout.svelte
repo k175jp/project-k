@@ -96,7 +96,7 @@
   {/if}
 
   {#if $showCreateQuizToast}
-    <Toast transition="slide" autohide={true} timeout={3000} on:close={() => showErrorToast.set(false)}>
+    <Toast color="green" transition="slide" autohide={true} timeout={3000} on:close={() => showErrorToast.set(false)}>
       クイズを作成しました
     </Toast>
   {/if}

@@ -14,3 +14,8 @@ class QuestionSetResponse(BaseModel):
     choice3: str
     choice4: str
     model_config = ConfigDict(from_attributes=True)
+
+class AnswerRequest(BaseModel):
+    choice: str
+    question_set_id: int
+    question_id: int
