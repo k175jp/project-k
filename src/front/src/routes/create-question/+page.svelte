@@ -5,6 +5,8 @@
 
   let questions = [{ question: '', answers: ['', '', '', '']}];
   let currentIndex = 0;
+  let title = "";
+  let description = "";
 
   function addQuestion() {
     questions = [...questions, { question: '', answers: ['', '', '', '']}];
@@ -34,7 +36,7 @@
         "choice4": q.answers[3]
       });
     }
-    let req = {'title': 'title', 'description':'description', 'questions': qs};
+    let req = {'title': title, 'description':description, 'questions': qs};
     fetch("http://192.168.7.38:8000/question/create", {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem('token'),
@@ -75,6 +77,16 @@
 
 <div class="container mx-auto p-4">
   <h1 class="text-2xl font-bold mb-4">問題作成</h1>
+
+  <div class="mb-4">
+    <Label for="title">タイトル</Label>
+    <Input id="title" type="text" bind:value={title} /> 
+  </div>
+
+  <div class="mb-4">
+    <Label for="description">説明</Label>
+    <Input id="description" type="text" bind:value={description} /> 
+  </div>
 
   <div class="mb-4">
     <Label for="question">問題</Label>
