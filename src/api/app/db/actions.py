@@ -44,7 +44,7 @@ def get_mistakes_question_set(user_id: int, question_set_id: int, db: Session) -
     question_set_all = db.query(Result).where(Result.question_set_id == question_set_id, Result.user_id == user_id, Result.is_correct == False).all()
     question_ids = []
     for question in question_set_all:
-        question_ids.append(question.id)
+        question_ids.append(question.question_id)
     question_set = db.query(Question).filter(Question.id.in_(question_ids))
     return question_set
 
