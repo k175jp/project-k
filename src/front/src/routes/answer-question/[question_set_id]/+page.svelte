@@ -112,7 +112,7 @@
     <div class="grid grid-cols-2 gap-4 mb-4">
       {#each ['A', 'B', 'C', 'D'] as choice, index}
         <Button 
-          color={selectedAnswer === choice ? 'red' : 'light'} 
+          color={answer === questions[currentQuestionIndex][`choice${index}`] ? 'green' : selectedAnswer === choice ? 'red' : 'light'} 
           class="justify-start"
           on:click={() => selectAnswer(choice, questions[currentQuestionIndex][`choice${index + 1}`])}
         >
