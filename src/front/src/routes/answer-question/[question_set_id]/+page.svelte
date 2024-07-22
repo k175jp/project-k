@@ -36,7 +36,6 @@
 
     async function selectAnswer(choice, select) {
       if (!isAnswered) {
-        selectedAnswer = choice;
         const response = await fetch(`http://192.168.7.38:8000/question/answer`, {
         method: 'POST',
         headers: {
@@ -53,6 +52,7 @@
         if (answer === select) {
           isCorrect = isCorrect + 1;
         }
+        selectedAnswer = choice;
         isAnswered = true;
       }
     }
