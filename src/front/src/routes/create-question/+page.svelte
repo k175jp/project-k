@@ -1,69 +1,67 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { Input, Label, Button, Toast } from "flowbite-svelte";
-  import { showEmptyFieldsToast, showLoginRequiredToast, showErrorToast, showCreateQuizToast } from '../stores';
+  import { Input, Label, Alert, Button } from "flowbite-svelte";
+
 
   let questions = [{ question: '', answers: ['', '', '', '']}];
   let currentIndex = 0;
-  let title = "";
-  let description = "";
+  let Modal = false;
+  let Modal1 = false;
+  let Modal2 = false;
 
   function addQuestion() {
-    questions = [...questions, { question: '', answers: ['', '', '', '']}];
+    questions.push({ question: '', answers: ['', '', '', '']});
+    questions = questions
     currentIndex = questions.length - 1;
   }
 
   function deleteQuestion() {
     if (questions.length > 1) {
-      questions = questions.filter((_, index) => index !== currentIndex);
+      questions.splice(currentIndex, 1);
+      questions = questions
       currentIndex = Math.max(0, currentIndex - 1);
     }
   }
 
   function saveQuestions() {
+    console.log('Questions saved', questions);
     let qs = [];
     for (let q of questions) {
-      if (q.question === "" || q.answers.some(a => a === "")) {
-        showEmptyFieldsToast.set(true);
-        setTimeout(() => showEmptyFieldsToast.set(false), 3000);
+    if (q.question === "" || q.answers[0] === "" || q.answers[1] === "" || q.answers[2] === "" || q.answers[3] === "") {
+        Modal = true;
         return;
-      }
-      qs.push({
-        "text": q.question,
-        "choice1": q.answers[0], 
-        "choice2": q.answers[1], 
-        "choice3": q.answers[2], 
-        "choice4": q.answers[3]
-      });
     }
-    let req = {'title': title, 'description':description, 'questions': qs};
-    fetch("http://192.168.7.38:8000/question/create", {
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem('token'),
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(req),
-      method: "POST"
+	qs.push({
+          "text": q.question,
+          "choice1": q.answers[0], 
+          "choice2": q.answers[1], 
+          "choice3": q.answers[2], 
+          "choice4": q.answers[3]
+        });
+    }
+    let req = {'title': 'title', 'description':'description', 'questions': qs};
+    fetch("http://192.168.7.38:8000/question/create",{
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('token'),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(req),
+	method: "POST"
     })
     .then(response => {
       if (!response.ok) {
         if (response.status === 401) {
-          showLoginRequiredToast.set(true);
-          setTimeout(() => showLoginRequiredToast.set(false), 3000);
+            Modal1 = true;
         } else {
-          showErrorToast.set(true);
-          setTimeout(() => showErrorToast.set(false), 3000);
+            Modal2 = true;
         }
       } else {
-        showCreateQuizToast.set(true);
         goto("/");
       }
     })
     .catch(error => {
-      console.error(error);
-      showErrorToast.set(true);
-      setTimeout(() => showErrorToast.set(false), 3000);
-    });
+        console.error(error)
+    })
   }
 
   function nextQuestion() {
@@ -74,45 +72,59 @@
     currentIndex = Math.max(0, currentIndex - 1);
   }
 </script>
+<!-- 
+<style>
+  .buttons button {
+    cursor: pointer;
+    flex: 1;
+    margin: 5px;
+  }
 
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">問題作成</h1>
+  .buttons button:hover {
+    background-color: grey;
+  }
+  
+  .navigation {
+    display: flex;
+    margin-top: 20px;
+  }
+</style> -->
 
-  <div class="mb-4">
-    <Label for="title">タイトル</Label>
-    <Input id="title" type="text" bind:value={title} /> 
-  </div>
+{#if Modal}
+    <Alert>空白があります</Alert>
+{/if}
 
-  <div class="mb-4">
-    <Label for="description">説明</Label>
-    <Input id="description" type="text" bind:value={description} /> 
-  </div>
+{#if Modal1}
+    <Alert>ログインしてください</Alert>
+{/if}
 
-  <div class="mb-4">
+{#if Modal2}
+    <Alert>エラーが発生しました</Alert>
+{/if}
+
+<div class="container">
+  <div class="question">
     <Label for="question">問題</Label>
-    <Input id="question" type="text" bind:value={questions[currentIndex].question} />
+    <Input class="input" id="question" type="text" bind:value={questions[currentIndex].question} />
   </div>
 
-  <div class="space-y-2">
+  <div class="answers">
     {#each questions[currentIndex].answers as answer, index}
       <div>
-        <Label for={`answer-${index}`}>
-          {index === 0 ? '回答1（答え）' : `回答 ${index + 1}`}
-        </Label>
-        <Input id={`answer-${index}`} type="text" bind:value={questions[currentIndex].answers[index]} />
+		<Input class="input" type="text" bind:value={questions[currentIndex].answers[index]} />
       </div>
     {/each}
   </div>
 
-  <div class="flex justify-between mt-4">
+  <div class="buttons">
     <Button on:click={addQuestion}>追加</Button>
-    <Button color="red" on:click={deleteQuestion}>削除</Button>
-    <Button color="green" on:click={saveQuestions}>保存</Button>
+    <Button on:click={deleteQuestion}>削除</Button>
+    <Button on:click={saveQuestions}>保存</Button>
   </div>
 
-  <div class="flex justify-between items-center mt-4">
-    <Button on:click={prevQuestion} disabled={currentIndex === 0}>&lt;</Button>
+  <div class="navigation">
+    <Button on:click={prevQuestion}>&lt;</Button>
     <div>{currentIndex + 1} / {questions.length}</div>
-    <Button on:click={nextQuestion} disabled={currentIndex === questions.length - 1}>&gt;</Button>
+    <Button on:click={nextQuestion}>&gt;</Button>
   </div>
 </div>

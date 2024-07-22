@@ -3,8 +3,7 @@ services:
     container_name: front
     restart: always
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     build: 
       context: front
       dockerfile: Dockerfile
