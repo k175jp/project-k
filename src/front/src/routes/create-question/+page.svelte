@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { Input, Label, Button, Toast } from "flowbite-svelte";
-  import { showEmptyFieldsToast, showLoginRequiredToast, showErrorToast, showCreateQuizToast } from '../stores';
+  import { showToast} from '../stores';
 
   let questions = [{ question: '', answers: ['', '', '', '']}];
   let currentIndex = 0;
@@ -24,8 +24,7 @@
     let qs = [];
     for (let q of questions) {
       if (q.question === "" || q.answers.some(a => a === "")) {
-        showEmptyFieldsToast.set(true);
-        setTimeout(() => showEmptyFieldsToast.set(false), 3000);
+        showToast('空欄があります', 'info');
         return;
       }
       qs.push({
@@ -48,21 +47,18 @@
     .then(response => {
       if (!response.ok) {
         if (response.status === 401) {
-          showLoginRequiredToast.set(true);
-          setTimeout(() => showLoginRequiredToast.set(false), 3000);
+          showToast('ログインしてください', 'error');
         } else {
-          showErrorToast.set(true);
-          setTimeout(() => showErrorToast.set(false), 3000);
+          showToast('エラーが発生しました', 'error');
         }
       } else {
-        showCreateQuizToast.set(true);
+        showToast('クイズを作成しました', 'success');
         goto("/");
       }
     })
     .catch(error => {
       console.error(error);
-      showErrorToast.set(true);
-      setTimeout(() => showErrorToast.set(false), 3000);
+      showToast('エラーが発生しました', 'error');
     });
   }
 
@@ -80,12 +76,12 @@
 
   <div class="mb-4">
     <Label for="title">タイトル</Label>
-    <Input id="title" type="text" bind:value={title} /> 
+    <Input id="title" type="text" bind:value={title} />
   </div>
 
   <div class="mb-4">
     <Label for="description">説明</Label>
-    <Input id="description" type="text" bind:value={description} /> 
+    <Input id="description" type="text" bind:value={description} />
   </div>
 
   <div class="mb-4">

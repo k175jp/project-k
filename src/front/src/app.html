@@ -6,7 +6,10 @@
     %sveltekit.head%
   </head>
   <body>
-    <div>%sveltekit.body%</div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script>
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    </script>
+    <div style="display: contents">%sveltekit.body%</div>
   </body>
 </html>
