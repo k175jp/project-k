@@ -20,5 +20,5 @@ async def register(user: UserCreate, db=Depends(get_session)) -> UserResponse:
 @router.get("/")
 async def read_user(
     active_user=Depends(manager), db=Depends(get_session)
-) -> UserResponse:
+):
     return

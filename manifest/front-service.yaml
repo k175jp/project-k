@@ -6,9 +6,10 @@ metadata:
   name: front
 spec:
   ports:
-  - port: 8000
+  - port: 30500
     protocol: TCP
-    targetPort: 8000
+    targetPort: 30500
+    nodePort: 30500
   selector:
     app: front
   type: NodePort

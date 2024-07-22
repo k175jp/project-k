@@ -3,6 +3,7 @@ from typing import Optional
 from db import SessionLocal
 from db.models import User, QuestionSet, Question, Result
 from security import hash_password, manager
+from sqlalchemy import asc, or_
 from sqlalchemy.orm import Session
 
 def get_user_by_name(name: str, db: Session) -> Optional[User]:
@@ -40,11 +41,11 @@ def get_mistakes_question_set(user_id: int, question_set_id: int, db: Session) -
     question_ids = []
     for question in question_set_all:
         question_ids.append(question.question_id)
-    question_set = db.query(Question).filter(Question.id.in_(question_ids))
+    question_set = db.query(Question).where(Question.id.in_(question_ids)).order_by(asc(Question.id))
     return question_set
 
 def get_question_set_by_id(question_set_id: int, db: Session) -> QuestionSet:
-    question_set = db.query(Question).where(Question.question_set_id == question_set_id).all()
+    question_set = db.query(Question).where(Question.question_set_id == question_set_id).order_by(asc(Question.id)).all()
     return question_set
 
 def get_answer(question_id: int, db: Session) -> str:
@@ -59,3 +60,29 @@ def save_result(user_id: int, question_set_id: int, question_id: int, is_correct
         result = Result(user_id=user_id, question_set_id=question_set_id, question_id=question_id, is_correct=is_correct)
         db.add(result)
     db.commit()
+
+def get_question_set(db: Session):
+    question = db.query(QuestionSet.title, QuestionSet.description, QuestionSet.id, User.username.label("username")).join(User, User.id == QuestionSet.user_id).all()
+    return question
+
+def search_keyword(keyword: str, db: Session):
+    question_set = db.query(QuestionSet.title, QuestionSet.description, QuestionSet.id, User.username.label("username")).where(or_(QuestionSet.title.like(f'%{keyword}%'), QuestionSet.description.like(f'%{keyword}%'))).join(User, User.id == QuestionSet.user_id).all()
+    return question_set
+
+def search_keyword_me(keyword: str, user_id: int, db: Session):
+    question_set = db.query(QuestionSet.title, QuestionSet.description, QuestionSet.id, User.username.label("username")).where(QuestionSet.user_id == user_id, or_(QuestionSet.title.like(f'%{keyword}%'), QuestionSet.description.like(f'%{keyword}%'))).join(User, User.id == QuestionSet.user_id).all()
+    return question_set
+
+def my_question_set(user_id: int, db: Session):
+    question_set = db.query(QuestionSet.title, QuestionSet.description, QuestionSet.id, User.username.label("username")).where(QuestionSet.user_id == user_id).join(User, User.id == QuestionSet.user_id).all()
+    return question_set
+
+def get_result(question_set_id: int, db: Session):
+    items = db.query(Result.question_id, Result.is_correct, User.username.label("username")).where(Result.question_set_id == question_set_id).join(User, User.id == Result.user_id).order_by(asc(Result.question_id)).all()
+    result = {}
+    for item in items:
+        if item.username in result.keys():
+            result[item.username].append({"question_id": item.question_id, "is_correct": item.is_correct})
+        else:
+            result[item.username] = [{"question_id": item.question_id, "is_correct": item.is_correct}]
+    return result

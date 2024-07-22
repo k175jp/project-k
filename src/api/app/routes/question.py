@@ -3,8 +3,8 @@ import random
 from fastapi import APIRouter, Depends
 
 from db import get_session
-from db.actions import create_question_set, create_question, get_mistakes_question_set, get_question_set_by_id, get_answer, save_result
-from models.question import CreateQuestion, QuestionSetResponse, AnswerRequest
+from db.actions import create_question_set, create_question, get_mistakes_question_set, get_question_set_by_id, get_answer, save_result, get_question_set, search_keyword, search_keyword_me, my_question_set, get_result
+from models.question import CreateQuestion, QuestionSetResponse, AnswerRequest, GetQuestion
 from security import verify_password, manager
 
 router = APIRouter()
@@ -27,7 +27,7 @@ async def create(
 
 
 @router.get("/get_question_set/{question_set_id}")
-async def get_question_set(
+async def get_question(
     question_set_id: int, mistakes: str = "false", active_user=Depends(manager), db=Depends(get_session)
 ):
     if mistakes == "true":
@@ -57,3 +57,39 @@ async def answer(
     save_result(user_id, question_set_id, question_id, is_correct, db)
     
     return answer
+
+
+@router.get("/get")
+async def read_question_set(
+    active_user=Depends(manager), db=Depends(get_session)
+):
+    question_set = get_question_set(db)
+    return [GetQuestion.from_orm(i) for i in question_set]
+
+@router.get("/search")
+async def search(
+    q: str, active_user=Depends(manager), db=Depends(get_session)
+):
+    question_set = search_keyword(q, db)
+    return [GetQuestion.from_orm(i) for i in question_set]
+
+@router.get("/get_my_question_set")
+async def get_my_question_set(
+    active_user=Depends(manager), db=Depends(get_session)
+):
+    question_set = my_question_set(active_user.id, db)
+    return [GetQuestion.from_orm(i) for i in question_set]
+
+@router.get("/search_me")
+async def search_me(
+    q: str, active_user=Depends(manager), db=Depends(get_session)
+):
+    question_set = search_keyword_me(q, active_user.id, db)
+    return [GetQuestion.from_orm(i) for i in question_set]
+
+@router.get("/result/{question_set_id}")
+async def result(
+    question_set_id: int, active_user=Depends(manager), db=Depends(get_session)
+):
+    result = get_result(question_set_id, db)
+    return result

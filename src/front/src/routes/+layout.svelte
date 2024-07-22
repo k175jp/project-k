@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import "../app.css"
-  import { NavLi, NavUl, NavHamburger, DarkMode } from 'flowbite-svelte';
+  import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, DarkMode } from 'flowbite-svelte';
   import { isLoggedIn, toasts, showToast} from './stores';
   import Fa from 'svelte-fa';
   import { faCheckCircle, faTimesCircle, faInfoCircle, faHome, faSignInAlt, faUserPlus, faSignOutAlt, faUser, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@
 
   let hidden = true;
 
-  function toggle() {
+  function toggleNavbar() {
     hidden = !hidden;
   }
 
@@ -20,7 +20,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await fetch('/api/auth/check-token', {
+        const response = await fetch('http://192.168.7.38:8000/user/', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -54,7 +54,7 @@
     localStorage.removeItem('token');
     isLoggedIn.set(false);
     showToast('ログアウトしました', 'success');
-    goto('/');
+    goto('/login');
   }
 
   function toggleTheme() {
@@ -67,90 +67,46 @@
   }
 </script>
 
-<header class="fixed w-full top-0 z-50">
-  <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <a href="/" class="flex-shrink-0 flex items-center">
-            <span class="text-2xl font-semibold text-indigo-600 dark:text-indigo-400">Project-K</span>
-          </a>
-        </div>
-        <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <NavUl class="flex space-x-4">
-            <NavLi href="/" active={$page.url.pathname === '/'} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-              <Fa icon={faHome} class="mr-2" />
-              ホーム
-            </NavLi>
-            {#if $isLoggedIn}
-              <NavLi href="/" on:click={handleLogout} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                <Fa icon={faSignOutAlt} class="mr-2" />
-                ログアウト
-              </NavLi>
-              <NavLi href="/mypage" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                <Fa icon={faUser} class="mr-2" />
-                マイページ
-              </NavLi>
-              <NavLi href="/create-question" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                <Fa icon={faQuestionCircle} class="mr-2" />
-                クイズ作成
-              </NavLi>
-            {:else}
-              <NavLi href="/login" active={$page.url.pathname === '/login'} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                <Fa icon={faSignInAlt} class="mr-2" />
-                ログイン
-              </NavLi>
-              <NavLi href="/register" active={$page.url.pathname === '/register'} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                <Fa icon={faUserPlus} class="mr-2" />
-                新規登録
-              </NavLi>
-            {/if}
-          </NavUl>
-          <DarkMode on:change={toggleTheme} class="ml-4" />
-        </div>
-        <div class="sm:hidden flex items-center">
-          <NavHamburger on:click={toggle} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200" />
-        </div>
-      </div>
-    </div>
-  </nav>
-  {#if !hidden}
-    <div transition:fly="{{ y: -50, duration: 300, opacity: 0 }}" class="sm:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <div class="px-2 pt-2 pb-3 space-y-1">
-        <NavUl>
-          <NavLi href="/" active={$page.url.pathname === '/'} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 text-base font-medium transition-colors duration-200">
-            <Fa icon={faHome} class="mr-2" />
-            ホーム
-          </NavLi>
-          {#if $isLoggedIn}
-            <NavLi href="/" on:click={handleLogout} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 text-base font-medium transition-colors duration-200">
-              <Fa icon={faSignOutAlt} class="mr-2" />
-              ログアウト
-            </NavLi>
-            <NavLi href="/mypage" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 text-base font-medium transition-colors duration-200">
-              <Fa icon={faUser} class="mr-2" />
-              マイページ
-            </NavLi>
-            <NavLi href="/create-question" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 text-base font-medium transition-colors duration-200">
-              <Fa icon={faQuestionCircle} class="mr-2" />
-              クイズ作成
-            </NavLi>
-          {:else}
-            <NavLi href="/login" active={$page.url.pathname === '/login'} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 text-base font-medium transition-colors duration-200">
-              <Fa icon={faSignInAlt} class="mr-2" />
-              ログイン
-            </NavLi>
-            <NavLi href="/register" active={$page.url.pathname === '/register'} class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 text-base font-medium transition-colors duration-200">
-              <Fa icon={faUserPlus} class="mr-2" />
-              新規登録
-            </NavLi>
-          {/if}
-        </NavUl>
-        <DarkMode on:change={toggleTheme} class="mt-2" />
-      </div>
-    </div>
-  {/if}
-</header>
+<Navbar let:hidden let:toggle class="px-4 sm:px-6 lg:px-8">
+  <NavBrand href="/" class="mr-auto">
+    <span class="text-2xl font-semibold text-indigo-600 dark:text-indigo-400">Project-K</span>
+  </NavBrand>
+  
+  <div class="flex items-center order-2">
+    <DarkMode on:change={toggleTheme} class="mr-4" />
+    <NavHamburger on:click={toggleNavbar} class="md:hidden" />
+  </div>
+  
+  <NavUl {hidden} class="order-1 md:flex md:items-center w-full md:w-auto">
+    <NavLi href="/" active={$page.url.pathname === '/'}>
+      <Fa icon={faHome} class="mr-2" />
+      ホーム
+    </NavLi>
+    {#if $isLoggedIn}
+      <NavLi href="/" on:click={handleLogout}>
+        <Fa icon={faSignOutAlt} class="mr-2" />
+        ログアウト
+      </NavLi>
+      <NavLi href="/mypage">
+        <Fa icon={faUser} class="mr-2" />
+        マイページ
+      </NavLi>
+      <NavLi href="/create-question">
+        <Fa icon={faQuestionCircle} class="mr-2" />
+        クイズ作成
+      </NavLi>
+    {:else}
+      <NavLi href="/login" active={$page.url.pathname === '/login'}>
+        <Fa icon={faSignInAlt} class="mr-2" />
+        ログイン
+      </NavLi>
+      <NavLi href="/register" active={$page.url.pathname === '/register'}>
+        <Fa icon={faUserPlus} class="mr-2" />
+        新規登録
+      </NavLi>
+    {/if}
+  </NavUl>
+</Navbar>
 
 <div class="toast-container">
   {#each $toasts as toast (toast.id)}
