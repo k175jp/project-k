@@ -34,3 +34,7 @@
   .hover\:text-indigo-600:hover {
     color: var(--nav-hover-color);
   }
+
+  :global(body) {
+        @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300;
+    }

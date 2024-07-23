@@ -20,7 +20,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await fetch('http://192.168.7.38:8000/user/', {
+        const response = await fetch('http://192.168.7.38:30800/user/', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -36,6 +36,8 @@
         showToast('セッションが期限切れです。再度ログインしてください。', 'info');
         goto('/login');
       }
+    } else {
+      goto("/login");
     }
   }
 
@@ -83,7 +85,7 @@
       ホーム
     </NavLi>
     {#if $isLoggedIn}
-      <NavLi href="/" on:click={handleLogout}>
+      <NavLi on:click={handleLogout}>
         <Fa icon={faSignOutAlt} class="mr-2" />
         ログアウト
       </NavLi>

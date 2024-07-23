@@ -13,7 +13,7 @@
 
   async function handleSubmit() {
     try {
-      const response = await fetch('http://192.168.7.38:8000/auth/login', {
+      const response = await fetch('http://192.168.7.38:30800/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -9,7 +9,7 @@
     let result = {};
 
 	async function getProblemRandom() {
-		const response = await fetch('http://192.168.7.38:8000/question/get_my_question_set', {
+		const response = await fetch('http://192.168.7.38:30800/question/get_my_question_set', {
 			method: 'GET',
 			headers: {
 				'Authorization': "Bearer " + localStorage.getItem('token')
@@ -23,14 +23,13 @@
     });
 
     async function showModal(id){
-		const response = await fetch(`http://192.168.7.38:8000/question/result/${id}`, {
+		const response = await fetch(`http://192.168.7.38:30800/question/result/${id}`, {
 			method: 'GET',
 			headers: {
 				'Authorization': "Bearer " + localStorage.getItem('token')
  		},
 		});
 		result = await response.json();
-        console.log(result)
         modal = true;
     }
 
@@ -40,7 +39,7 @@
     }
 
     async function searchKeyword() {
-		const response = await fetch(`http://192.168.7.38:8000/question/search_me?q=${keyword}`, {
+		const response = await fetch(`http://192.168.7.38:30800/question/search_me?q=${keyword}`, {
 			method: 'GET',
 			headers: {
 				'Authorization': "Bearer " + localStorage.getItem('token')
