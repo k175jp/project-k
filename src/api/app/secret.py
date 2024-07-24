@@ -16,7 +16,7 @@ def create_secret():
         print(f"Secret stored at {os.path.abspath('.env')}")
 
 def overwrite_secret():
-    config = dotenv_vakues(env_file)
+    config = dotenv_values(env_file)
 
     with open('.env', 'w') as f:
         for key, value in config.items():

@@ -17,16 +17,8 @@ async def register(user: UserCreate, db=Depends(get_session)) -> UserResponse:
         raise UsernameAlreadyTaken
 
 
-@router.get("/{username}")
+@router.get("/")
 async def read_user(
-    username, active_user=Depends(manager), db=Depends(get_session)
-) -> UserResponse:
-    user = get_user_by_name(username, db)
-
-    if user is None:
-        raise InvalidUserName
-
-    if user.username != active_user.username:
-        raise InvalidPermissions
-
-    return UserResponse.from_orm(user).model_dump()
+    active_user=Depends(manager), db=Depends(get_session)
+):
+    return

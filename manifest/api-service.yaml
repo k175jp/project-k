@@ -6,9 +6,10 @@ metadata:
   name: api
 spec:
   ports:
-  - port: 5000
+  - port: 30800
     protocol: TCP
-    targetPort: 80
+    targetPort: 30800
+    nodePort: 30800
   selector:
     app: api
   type: NodePort

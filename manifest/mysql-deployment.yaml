@@ -14,6 +14,8 @@ spec:
       labels:
         app: mysql
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: vm-38
       containers:
       - image: mysql/mysql-server
         name: mysql
@@ -26,7 +28,11 @@ spec:
           value: "project_k"
         - name: MYSQL_ROOT_PASSWORD
           value: "project_k"
+        volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysql-data-mount
       volumes:
         - name: mysql-data-mount
-          persistentVolumeClaim:
-            claimName: mysql-data
+          hostPath:
+            path: /home/user/mysql-data-mount
+            type: DirectoryOrCreate
