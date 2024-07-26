@@ -11,7 +11,7 @@ services:
     image: k175/project-k:front
     tty: true
     ports:
-      - "80:80"
+      - "30500:30500"
     volumes:
       - ./front:/app
       - /app/node_modules
