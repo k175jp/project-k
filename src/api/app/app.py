@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,13 +14,7 @@ create_tables()
 
 app = FastAPI()
 
-
-origins = [
-    "http://192.168.7.5:30500",
-    "http://192.168.7.31:30500",
-    "http://192.168.7.32:30500",
-    "http://192.168.7.38:30500",
-]
+origins = os.getenv("ORIGINS", "").split(",")
 
 app.add_middleware(
     CORSMiddleware,

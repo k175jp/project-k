@@ -17,7 +17,7 @@
     let option = '';
 
     async function get_question(option) {
-      let url = `http://192.168.7.38:30800/question/get_question_set/${data.params.question_set_id}${option}`
+      let url = `/api/question/get_question_set/${data.params.question_set_id}${option}`
       const response = await fetch(url,{
         headers: {
           'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -36,7 +36,7 @@
 
     async function selectAnswer(choice, select) {
       if (!isAnswered) {
-        const response = await fetch(`http://192.168.7.38:30800/question/answer`, {
+        const response = await fetch(`/api/question/answer`, {
         method: 'POST',
         headers: {
           'Authorization': "Bearer " + localStorage.getItem('token'),

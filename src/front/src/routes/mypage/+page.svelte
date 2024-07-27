@@ -9,7 +9,7 @@
     let result = {};
 
 	async function getProblemRandom() {
-		const response = await fetch('http://192.168.7.38:30800/question/get_my_question_set', {
+		const response = await fetch('/api/question/get_my_question_set', {
 			method: 'GET',
 			headers: {
 				'Authorization': "Bearer " + localStorage.getItem('token')
@@ -23,7 +23,7 @@
     });
 
     async function showModal(id){
-		const response = await fetch(`http://192.168.7.38:30800/question/result/${id}`, {
+		const response = await fetch(`/api/question/result/${id}`, {
 			method: 'GET',
 			headers: {
 				'Authorization': "Bearer " + localStorage.getItem('token')
@@ -39,7 +39,7 @@
     }
 
     async function searchKeyword() {
-		const response = await fetch(`http://192.168.7.38:30800/question/search_me?q=${keyword}`, {
+		const response = await fetch(`/api/question/search_me?q=${keyword}`, {
 			method: 'GET',
 			headers: {
 				'Authorization': "Bearer " + localStorage.getItem('token')
@@ -81,7 +81,6 @@
 {/if}
 {#if questions.length > 0}
     <Label class="m-8 text-2xl">{questions[0].username}の問題一覧</Label>
-{/if}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 	{#each questions as question }
 	<Card on:click={showModal(question.id)} class="m-8 w-2xl">
@@ -91,4 +90,5 @@
 
 	{/each}
 </div>
+{/if}
 {/if}

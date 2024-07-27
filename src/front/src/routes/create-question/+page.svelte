@@ -36,7 +36,7 @@
       });
     }
     let req = {'title': title, 'description':description, 'questions': qs};
-    fetch("http://192.168.7.38:30800/question/create", {
+    fetch("/api/question/create", {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem('token'),
         "Content-Type": "application/json"

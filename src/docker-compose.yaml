@@ -16,6 +16,8 @@ services:
       - ./front:/app
       - /app/node_modules
     init: true
+    environment:
+      API_URL: ${API_URL}
     
 
   api:
@@ -32,15 +34,21 @@ services:
     image: k175/project-k:api
     ports:
       - "30800:30800"
+    environment:
+      ORIGINS: ${ORIGINS}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
 
   mysql:
     image: mysql/mysql-server
     volumes:
       - ./db:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: project_k
-      MYSQL_USER: project_k
-      MYSQL_PASSWORD: project_k
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     healthcheck:
         test: mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD

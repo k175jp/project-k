@@ -20,7 +20,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await fetch('http://192.168.7.38:30800/user/', {
+        const response = await fetch('/api/user/', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -80,11 +80,11 @@
   </div>
   
   <NavUl {hidden} class="order-1 md:flex md:items-center w-full md:w-auto">
-    <NavLi href="/" active={$page.url.pathname === '/'}>
-      <Fa icon={faHome} class="mr-2" />
-      ホーム
-    </NavLi>
     {#if $isLoggedIn}
+      <NavLi href="/" active={$page.url.pathname === '/'}>
+        <Fa icon={faHome} class="mr-2" />
+        ホーム
+      </NavLi>
       <NavLi on:click={handleLogout}>
         <Fa icon={faSignOutAlt} class="mr-2" />
         ログアウト

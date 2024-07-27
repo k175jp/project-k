@@ -19,15 +19,9 @@ spec:
       containers:
       - image: mysql/mysql-server
         name: mysql
-        env:
-        - name: MYSQL_DATABASE
-          value: "project_k"
-        - name: MYSQL_USER
-          value: "project_k"
-        - name: MYSQL_PASSWORD
-          value: "project_k"
-        - name: MYSQL_ROOT_PASSWORD
-          value: "project_k"
+        envFrom:
+          - configMapRef:
+              name: env
         volumeMounts:
           - mountPath: /var/lib/mysql
             name: mysql-data-mount
