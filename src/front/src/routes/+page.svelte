@@ -46,7 +46,7 @@
 {#if questions.length > 0}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 	{#each questions as question }
-	<Card href="/" class="m-8 w-2xl">
+	<Card class="m-8 w-2xl">
 		<h3 class="m-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{question.title} </h3>
 		<p class="m-8 font-normal text-gray-700 dark:text-gray-400 leading-tight">{question.description}</p>
 		<div class="p-8">
