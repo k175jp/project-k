@@ -11,14 +11,6 @@ DB_USER = os.getenv("MYSQL_USER", "")
 DB_PASS = os.getenv("MYSQL_PASSWORD", "")
 DB_NAME = os.getenv("MYSQL_DATABASE", "")
 
-from logging import getLogger, StreamHandler
-logger = getLogger(__name__)
-logger.addHandler(StreamHandler())
-logger.setLevel("INFO")
-
-logger.info(f"{DB_USER =} {DB_PASS = } {DB_NAME = }")
-
-
 class Settings(BaseSettings):
     project_root: pathlib.Path = root
     secret: str = ""
