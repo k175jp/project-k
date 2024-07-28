@@ -93,7 +93,7 @@
     {#each questions[currentIndex].answers as answer, index}
       <div>
         <Label for={`answer-${index}`}>
-          {index === 0 ? '回答1（答え）' : `回答 ${index + 1}`}
+          選択肢 {index + 1} {index === 0 ? '（答え）' : ''}
         </Label>
         <Input id={`answer-${index}`} type="text" bind:value={questions[currentIndex].answers[index]} />
       </div>
